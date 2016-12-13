@@ -1,21 +1,16 @@
 import os
 import time
+
+# custom modules
+from torbotcmd import TorbotCommand
+from torbotCommander import TorbotCommander
+
 from slackclient import SlackClient
 from pymongo import MongoClient
 
-client = MongoClient()
-db = client.torbot
-
-# starterbot's ID as an environment variable
-BOT_ID = os.environ.get("BOT_ID")
-
-# constants
-AT_BOT = "<@" + BOT_ID + ">"
-EXAMPLE_COMMAND = "request"
-
 # instantiate Slack & Twilio clients
-slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-
+slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN').strip())
+AT_BOT = "<@" + os.environ.get("BOT_ID").strip() + ">"
 
 def handle_command(input):
     """
@@ -57,6 +52,7 @@ def parse_slack_output(slack_rtm_output):
     output_list = slack_rtm_output
     if output_list and len(output_list) > 0:
         for output in output_list:
+            print output
             if output and 'text' in output and AT_BOT in output['text']:
                 # return text after the @ mention, whitespace removed
                 return output
@@ -82,9 +78,12 @@ if __name__ == "__main__":
     if slack_client.rtm_connect():
         print("StarterBot connected and running!")
         while True:
-            command = parse_slack_output(slack_client.rtm_read())
-            if command:
-                handle_command(command)
+            bot_message = parse_slack_output(slack_client.rtm_read())
+            if bot_message:
+                print bot_message
+                bot_command = TorbotCommand(bot_message)
+                print str(TorbotCommander(bot_command))
             time.sleep(READ_WEBSOCKET_DELAY)
     else:
+        print slack_client.rtm_connect()
         print("Connection failed. Invalid Slack token or bot ID?")

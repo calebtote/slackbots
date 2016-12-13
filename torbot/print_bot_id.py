@@ -1,11 +1,10 @@
-import os
+import os, sys, subprocess
 from slackclient import SlackClient
-
 
 BOT_NAME = 'torbot'
 
-slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-
+# sys.argv[1] should be the SlackBot API Token
+slack_client = SlackClient(sys.argv[1])
 
 if __name__ == "__main__":
     api_call = slack_client.api_call("users.list")
@@ -14,6 +13,4 @@ if __name__ == "__main__":
         users = api_call.get('members')
         for user in users:
             if 'name' in user and user.get('name') == BOT_NAME:
-                print("Bot ID for '" + user['name'] + "' is " + user.get('id'))
-    else:
-        print("could not find bot user with the name " + BOT_NAME)
+                print user.get('id')
