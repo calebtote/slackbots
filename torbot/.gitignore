@@ -1,2 +1,4 @@
 setenv.sh
 *.pyc
+../.history/*
+../.vscode/*

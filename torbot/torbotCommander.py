@@ -25,7 +25,7 @@ class TorbotCommander(object):
 
     def __init__(self, TorbotCommandObj):
         TorbotCommander.botResponse = None
-        if TorbotCommandObj.getCommand():
+        if TorbotCommandObj.getCommand() and TorbotCommandObj.getCommand() in TorbotCommander.execute:
             TorbotCommander.execute[TorbotCommandObj.getCommand()](TorbotCommandObj)
         
         if not TorbotCommander.botResponse:
