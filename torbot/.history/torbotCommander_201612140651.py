@@ -31,13 +31,10 @@ class TorbotCommander(object):
         if not TorbotCommander.botResponse:
             TorbotCommander.botResponse = "Hmm, I'm not sure what you mean."
 
-        # TODO: This needs to be it's own class.
         # send response
         slack_client.api_call("chat.postMessage", channel=TorbotCommandObj.getInput()['channel'],
                           text=TorbotCommander.botResponse, as_user=True)
-    # TODO: All the mongodb connections need to be cleaned up somehow.
-    # TODO: The response needs to be it's own class as well. Or at least a more
-    #       complex data type, as a member of an api_call class.
+    
     def TorrentRequest(TorbotCommandObj):
         print "request"
         if not TorbotCommandObj.getText(): 

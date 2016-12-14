@@ -1,11 +1,17 @@
-import os, sys, time, traceback
+import os
+import time
+import traceback
 
 # custom modules
 from torbotcmd import TorbotCommand
 from torbotCommander import TorbotCommander, lookup_user_by_id
-# ----------
+
 from slackclient import SlackClient
 from pymongo import MongoClient
+
+# instantiate Slack & Twilio clients
+slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN').strip())
+AT_BOT = "<@" + os.environ.get("BOT_ID").strip() + ">"
 
 def parse_slack_output(slack_rtm_output):
     """
@@ -13,26 +19,20 @@ def parse_slack_output(slack_rtm_output):
         This parsing function returns None unless a message is
         directed at the Bot, based on its ID.
     """
-    bot_mention = "<@" + os.environ.get("BOT_ID").strip() + ">"
     output_list = slack_rtm_output
     if output_list and len(output_list) > 0:
         for output in output_list:
             print output
-            if output and 'text' in output and bot_mention in output['text']:
+            if output and 'text' in output and AT_BOT in output['text']:
                 # return text after the @ mention, whitespace removed
                 return output
+
     return None
 
 if __name__ == "__main__":
-    if not os.environ.get('SLACK_BOT_TOKEN'):
-        print("$SLACK_BOT_TOKEN env variable not set. Exiting.")
-        sys.exit(1)
-
-    # instantiate Slack & Twilio clients
-    slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN').strip())
-
+    READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
     if slack_client.rtm_connect():
-        print("Torbot connected...")
+        print("StarterBot connected and running!")
         while True:
             bot_message = parse_slack_output(slack_client.rtm_read())
             if bot_message:
@@ -41,12 +41,13 @@ if __name__ == "__main__":
                     bot_command = TorbotCommand(bot_message)
                     print str(TorbotCommander(bot_command))
                 except:
+                    
                     errRespond = "Hey <@%s>! The following almost killed me!\n `[%s]` \n*Stack Trace:* \n ```%s```\
                     :rotating_light: Please file a bug here: https://github.com/calebtote/slackbots/issues :rotating_light: \n" % (lookup_user_by_id(bot_message['user']), bot_message, traceback.format_exc())
                     slack_client.api_call("chat.postMessage", channel=bot_message['channel'],
                           text=errRespond, as_user=True)
                     pass
-            # we don't want to spam the firehose'
-            time.sleep(1)
+            time.sleep(READ_WEBSOCKET_DELAY)
     else:
-        print("rtm_connect() failed. Invalid Slack token or bot ID?")
+        print slack_client.rtm_connect()
+        print("Connection failed. Invalid Slack token or bot ID?")

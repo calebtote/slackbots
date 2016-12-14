@@ -17,7 +17,7 @@ class MongoConnection(object):
         self.mongoendpoint = endpoint
         MongoConnection.mongoconn = self.__mongo_connect()
     
-    # TODO: This is fun, but I'm not sure how useful it is. Maybe reconsider, or expand flexibility. 
+    # TODO: This is fun, but I'm not sure how useful it is. Maybe reconsider.
     def __mongo_connect(self):
         if self.mongoendpoint is not None: 
             return MongoClient(host=self.mongoendpoint, port=27017, document_class=dict, tz_aware=False, connect=True)[self.mongodb][self.mongocollection]

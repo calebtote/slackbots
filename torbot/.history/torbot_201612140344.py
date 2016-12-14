@@ -3,7 +3,7 @@ import os, sys, time, traceback
 # custom modules
 from torbotcmd import TorbotCommand
 from torbotCommander import TorbotCommander, lookup_user_by_id
-# ----------
+
 from slackclient import SlackClient
 from pymongo import MongoClient
 
@@ -49,4 +49,4 @@ if __name__ == "__main__":
             # we don't want to spam the firehose'
             time.sleep(1)
     else:
-        print("rtm_connect() failed. Invalid Slack token or bot ID?")
+        print("Connection failed. Invalid Slack token or bot ID?")
