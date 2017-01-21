@@ -1,8 +1,11 @@
 #torbotCommander.py
 import os
 import slackutil
+import re
+import json
 
 from jbotResponse import JBotResponse
+from jbotIssue import JBotIssue
 from slackclient import SlackClient
 
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN').strip())
@@ -21,7 +24,11 @@ class JBotScanner(object):
             for line in self.input:
                 if line and line['type'] == 'message' and (line['user'] != os.environ.get("BOT_ID").strip()):
                     for pattern in JBotScanner.patternsToMatch:
-                        if pattern.lower() in line['text'].lower():
+                        patternMatch = re.findall(r'\b(?:%s)\d*\b' % pattern.lower(), line['text'].lower(), re.IGNORECASE)
+                        if patternMatch:
+                            print "FOUND %s" % patternMatch
                             botResponse = JBotResponse(line['channel'])
-                            botResponse.msg = "Matched: `%s`" % pattern
+
+                            # eventually expand to recognize multiple mentions
+                            botResponse.msg = "%s" % json.dumps(JBotIssue(patternMatch[0]).format, indent=4)
                             botResponse.Send()

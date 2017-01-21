@@ -2,6 +2,7 @@ import os, sys, time, traceback
 
 # custom modules
 import slackutil
+
 from jbotScanner import JBotScanner
 from jbotcmd import JBotCommand
 from jbotCommander import JBotCommander
