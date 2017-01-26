@@ -23,21 +23,17 @@ if __name__ == "__main__":
         while True:
             rtm = slack_client.rtm_read()
             botMessage = slackutil.parse_slack_output(rtm, botMention)
-            #try:
-            if botMessage:
-                botCommand = JBotCommand(botMessage)
-                print str(JBotCommander(botCommand))
-            else:
-                print str(JBotScanner(rtm))
-            """except:
-                    errRespond = "Hey <@%s>! The following almost killed me!\n `[%s]` \n*Stack Trace:* \n ```%s```\
-                    :rotating_light: Please file a bug here: https://github.com/calebtote/slackbots/issues :rotating_light: \n" \
-                    % (slackutil.lookup_user_by_id(botMessage['user']), botMessage, traceback.format_exc())
-                    slack_client.api_call("chat.postMessage", channel=botMessage['channel'],
-                          text=errRespond, as_user=True)
-                    pass"""
+            try:
+                if botMessage:
+                    botCommand = JBotCommand(botMessage)
+                    print str(JBotCommander(botCommand))
+                else:
+                    JBotScanner(rtm)
+            except:
+                    print traceback.format_exc()
+                    pass
 
-            # we don't want to spam the firehose'
-            time.sleep(1)
+            # we don't want to spam the firehose
+            time.sleep(0.5)
     else:
         print("rtm_connect() failed. Invalid Slack token or bot ID?")

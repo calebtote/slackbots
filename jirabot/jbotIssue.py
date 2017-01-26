@@ -1,4 +1,5 @@
 # jbotissue.py
+import json
 from JIRAconn import JIRA_ENDPOINT, JIRA_CONN
 
 class JBotIssue(object):
@@ -9,18 +10,20 @@ class JBotIssue(object):
         if not self.jiraIssueObj:
             raise ValueError('jiraIssueObj: Could not locate %s' % jiraIssueID)
         else:
+            if self.jiraIssueObj.fields.description: 
+                self.description = self.jiraIssueObj.fields.description[0:self.maxSummary]
+            else:
+                self.description = "_No description._"
             self.link = "%s/browse/%s" % (JIRA_ENDPOINT, self.jiraIssueObj)
-            self.format = {
-                "attachments": [
+            self.format = [
                     {
                         "fallback": "%s, %s" % (self.jiraIssueObj.fields.summary, self.link),
-                        "pretext": "Detail summary for %s" % self.jiraIssueObj,
-                        "title": self.jiraIssueObj.fields.summary,
+                        "title": "[%s] %s" % (jiraIssueID.upper(), self.jiraIssueObj.fields.summary),
                         "title_link": self.link,
-                        "text": self.jiraIssueObj.fields.description[0:self.maxSummary],
-                        #"color": "#7CD197",
+                        "text": self.description,
+                        "color": "#7CD197",
                         "mrkdwn_in": ["text", "pretext", "fields"]
                     }
                 ]
-            }
             
+            print json.dumps(self.format)
