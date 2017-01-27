@@ -10,7 +10,6 @@ def parse_slack_output(slack_rtm_output, matchString):
     outputList = slack_rtm_output
     if outputList and len(outputList) > 0:
         for output in outputList:
-            print output
             if output and 'text' in output and matchString in output['text']:
                 # return text after the `matchString`, whitespace removed
                 return output

@@ -15,6 +15,8 @@ class JBotIssue(object):
             else:
                 self.description = "_No description._"
             self.link = "%s/browse/%s" % (JIRA_ENDPOINT, self.jiraIssueObj)
+            
+            # TODO: Make more flexible
             self.format = [
                     {
                         "fallback": "%s, %s" % (self.jiraIssueObj.fields.summary, self.link),
@@ -25,5 +27,3 @@ class JBotIssue(object):
                         "mrkdwn_in": ["text", "pretext", "fields"]
                     }
                 ]
-            
-            print json.dumps(self.format)

@@ -8,12 +8,20 @@ slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN').strip())
 class JBotResponse(object):
     def __init__(self, channel=None, resp=None, th=None):
         self.msg = resp
-        self.channel = channel
+        self.channelID = channel
+        if self.channelID:
+            self.channelName = slack_client.api_call("channels.info", channel=self.channelID)['channel']['name']
         self.thread = th
     
+    # TODO: Make more generic external
     def Send(self):
         if (self.msg):
-            slack_client.api_call("chat.postMessage", channel=self.channel, thread_ts=self.thread, attachments=self.msg, as_user=True)
+            print "\n\tSending response to channel: %s ...\n" % self.channelName
+            print self.msg
+
+            # TODO: Remove implicit thread reply - should be dynamic
+            retVal = slack_client.api_call("chat.postMessage", channel=self.channelID, thread_ts=self.thread, attachments=self.msg, as_user=True)
             self.msg = None
+            return retVal
         else:
             raise ValueError('JBotResponse.Send() was called, but response is {0}'.format(self.msg))
