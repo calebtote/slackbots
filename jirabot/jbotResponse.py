@@ -10,7 +10,10 @@ class JBotResponse(object):
         self.msg = resp
         self.channelID = channel
         if self.channelID:
-            self.channelName = slack_client.api_call("channels.info", channel=self.channelID)['channel']['name']
+            if slack_client.api_call("channels.info", channel=self.channelID)['ok']:  # public channel
+                self.channelName = slack_client.api_call("channels.info", channel=self.channelID)['channel']['name']
+            else: # private channel
+                self.channelName = slack_client.api_call("groups.info", channel=self.channelID)['group']['name']
         self.thread = th
     
     # TODO: Make more generic external
