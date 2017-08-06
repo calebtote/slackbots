@@ -1,7 +1,7 @@
 import os, sys, subprocess
 from slackclient import SlackClient
 
-BOT_NAME = 'torbot'
+BOT_NAME = 'jirabot'
 
 # sys.argv[1] should be the SlackBot API Token
 slack_client = SlackClient(sys.argv[1])
