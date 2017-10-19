@@ -34,7 +34,7 @@ if __name__ == "__main__":
             try:
                 if botMessage:
                     botCommand = JBotCommand(botMessage)
-                    print str(JBotCommander(botCommand))
+                    print str(JBotCommander(botCommand, rtm))
                 else:
                     JBotScanner(rtm)
             except:
@@ -42,6 +42,6 @@ if __name__ == "__main__":
                     pass
 
             # we don't want to spam the firehose
-            time.sleep(0.5)
+            time.sleep(0.3)
     else:
         print("rtm_connect() failed. Invalid Slack token or bot ID?")

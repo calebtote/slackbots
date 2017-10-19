@@ -1,6 +1,6 @@
 # jbotissue.py
 import json
-from JIRAconn import JIRA_ENDPOINT, JIRA_CONN
+from JIRAconn import JIRA_SERVER, JIRA_CONN
 
 class JBotIssue(object):
     def __init__(self, jiraIssueID):
@@ -14,7 +14,7 @@ class JBotIssue(object):
                 self.description = self.jiraIssueObj.fields.description[0:self.maxSummary]
             else:
                 self.description = "_No description._"
-            self.link = "%s/browse/%s" % (JIRA_ENDPOINT, self.jiraIssueObj)
+            self.link = "%s/browse/%s" % (JIRA_SERVER, self.jiraIssueObj)
             
             # TODO: Make more flexible
             self.format = [

@@ -10,20 +10,21 @@ from slackclient import SlackClient
 
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN').strip())
 
-class JBotScanner(object):   
-    patternsToMatch = [ 'GOSOPS-' ]
+class JBotScanner(object):
+    patternsToMatch = ['GOSOPS-', 'GOSRM-', 'TOPSCENT-', 'GOSTOOLS-', 'GOS-', 'GOSSOCIAL-', 'GOSPF-', 'GOSREQ-',
+                       'GOSPJR-']
 
     def __init__(self, input):
         if input:
             self.input = input
-            for line in self.validate(): 
+            for line in self.validate():
                 self.parse(line)
 
     def parse(self, line):
         for pattern in JBotScanner.patternsToMatch:
             patternMatch = re.findall(r'\b(?:%s)\d*\b' % pattern.lower(), line['text'].lower(), re.IGNORECASE)
             if patternMatch:
-                botResponse = JBotResponse(line['channel'], None, line['ts'])
+                botResponse = JBotResponse(line['channel'], None, line['ts'], reply_as_thread=True)
 
                 for pMatch in patternMatch:
                     botResponse.msg = "%s" % json.dumps(JBotIssue(pMatch).format, indent=4)

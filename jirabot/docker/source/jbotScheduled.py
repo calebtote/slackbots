@@ -1,7 +1,7 @@
 # jbotScheduled.py
 
 import os, json
-from JIRAconn import JIRA_ENDPOINT, JIRA_CONN
+from JIRAconn import JIRA_SERVER, JIRA_CONN
 from jbotIssue import JBotIssue
 from jbotResponse import JBotResponse
 from slackclient import SlackClient
