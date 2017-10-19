@@ -77,5 +77,5 @@ if (len(sys.argv) > 1 and sys.argv[1].lower() == 'oauth'):
         'key_cert': RSA_KEY
     })
 else:
-    JIRA_CONN = JIRA(options={'server': JIRA_SERVER, 'rest_api_version': 'latest'}, basic_auth=('***REMOVED***','***REMOVED***'))
+    JIRA_CONN = JIRA(options={'server': JIRA_SERVER, 'rest_api_version': 'latest'}, basic_auth=('*','*'))
 
