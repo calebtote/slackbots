@@ -23,7 +23,7 @@ VERIFIER = 'jira_verifier'
 RSA_KEY = read('/Users/ctote/.ssh/jira.pem')
 
 # The URLs for the JIRA instance
-JIRA_SERVER = 'https://eadpjira.ea.com'
+JIRA_SERVER = 'https://*'
 REQUEST_TOKEN_URL = JIRA_SERVER + '/plugins/servlet/oauth/request-token'
 AUTHORIZE_URL = JIRA_SERVER + '/plugins/servlet/oauth/authorize'
 ACCESS_TOKEN_URL = JIRA_SERVER + '/plugins/servlet/oauth/access-token'
