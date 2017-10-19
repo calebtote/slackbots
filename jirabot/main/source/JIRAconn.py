@@ -23,7 +23,7 @@ VERIFIER = 'jira_verifier'
 RSA_KEY = read('/Users/ctote/.ssh/jira.pem')
 
 # The URLs for the JIRA instance
-JIRA_SERVER = 'https://eadpjira.ea.com'
+JIRA_SERVER = 'https://*'
 REQUEST_TOKEN_URL = JIRA_SERVER + '/plugins/servlet/oauth/request-token'
 AUTHORIZE_URL = JIRA_SERVER + '/plugins/servlet/oauth/authorize'
 ACCESS_TOKEN_URL = JIRA_SERVER + '/plugins/servlet/oauth/access-token'
@@ -77,5 +77,5 @@ if (len(sys.argv) > 1 and sys.argv[1].lower() == 'oauth'):
         'key_cert': RSA_KEY
     })
 else:
-    JIRA_CONN = JIRA(options={'server': JIRA_SERVER, 'rest_api_version': 'latest'}, basic_auth=('***REMOVED***','***REMOVED***'))
+    JIRA_CONN = JIRA(options={'server': JIRA_SERVER, 'rest_api_version': 'latest'}, basic_auth=('*','*'))
 
